@@ -3,31 +3,49 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { client } from "@/sanity/lib/client";
+import { urlFor } from "@/sanity/lib/image";
+import { Product } from "@/types/product";
+
+
 
 interface PageProps {
   params: {
-    id: string;
+    _id: string;
   };
 }
 
 const ProductPage = ({ params }: PageProps) => {
-  const { id } = params;
-  const [product, setProduct] = useState<{ 
-    image?: string; 
-    name?: string; 
-    price?: number; 
-    description?: string; 
-    category?: string; 
-    rating?: { rate: number; count: number } 
-  }>({});
+  const { _id } = params;
+  
+  const [product, setProduct] = useState<Product>({
+    _id: '',
+    image: '',
+    name: '',
+    price: 0,
+    description: '',
+    category: '',
+    rating: 0,
+    stock: 0,
+  });
   const [selectedTab, setSelectedTab] = useState('description');
   const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-        const data = await response.json();
+        const query = `*[_type == "product" && _id == $id][0] {
+         _id,
+        image,
+          name,
+          price,
+          description,
+          category,
+          rating
+        }`;
+        const data = await client.fetch(query, params);
+        console.log(data.image); // Log the image URL
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -36,7 +54,12 @@ const ProductPage = ({ params }: PageProps) => {
       }
     };
     fetchProduct();
-  }, [id]);
+  }, [_id]);
+
+  const addToCart = (product:Product) =>{
+    setCart((prevCart) => [...prevCart, product])
+    alert(`${product.name} added to cart`)
+  }
 
   if (!product && !loading) {
     return <div>Product not found</div>;
@@ -70,7 +93,7 @@ const ProductPage = ({ params }: PageProps) => {
                   <div className="animate-pulse w-full h-48 sm:h-64 bg-gray-300 rounded-lg"></div>
                 ) : (
                   <Image
-                    src={product.image ?? '/default-image.png'}
+                    src={product.image ? urlFor(product.image).url() : '/default-image.png'}
                     alt={product.name ?? 'Product Image'}
                     width={400}
                     height={400}
@@ -87,7 +110,7 @@ const ProductPage = ({ params }: PageProps) => {
                       <div className="animate-pulse w-full h-20 sm:h-24 bg-gray-300 rounded-lg"></div>
                     ) : (
                       <Image
-                        src={product.image ?? '/default-image.png'}
+                        src={product.image ? urlFor(product.image).url() : '/default-image.png'}
                         alt={product.name ?? 'Product Image'}
                         width={100}
                         height={100}
@@ -134,7 +157,8 @@ const ProductPage = ({ params }: PageProps) => {
               <div className="animate-pulse h-10 bg-gray-300 rounded mb-8"></div>
             ) : (
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <button className="bg-[#FB2E86] text-white px-8 py-2 rounded hover:bg-[#d91c6c] transition-colors w-full sm:w-auto">
+                <button className="bg-[#FB2E86] text-white px-8 py-2 rounded hover:bg-[#d91c6c] transition-colors w-full sm:w-auto"
+                onClick={() => addToCart(product)}>
                   Add To Cart
                 </button>
                 <button className="p-2 border border-gray-300 rounded hover:border-pink-500 hover:text-pink-500 transition-colors w-full sm:w-auto flex justify-center">
@@ -255,6 +279,7 @@ const ProductPage = ({ params }: PageProps) => {
         </div>
       </div>
     </main>
+    
   );
 };
 

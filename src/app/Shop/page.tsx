@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { client } from "@/sanity/lib/client"; // Import Sanity client
+import groq from "groq"; // Import GROQ
+import { urlFor } from "@/sanity/lib/image"; // Import urlFor for image URLs
 
 export interface Product {
   id: number;
@@ -28,12 +31,40 @@ const GridPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        setProducts(data);
+        console.log("Fetching products from Sanity...");
+        // Define the GROQ query to fetch products
+        const query = groq`*[_type == "product"]{
+          _id,
+          title,
+          price,
+          description,
+          category,
+          image,
+          rating {
+            rate,
+            count
+          }
+        }`;
+
+        // Fetch data from Sanity
+        const data = await client.fetch(query);
+        console.log("Fetched products:", data);
+
+        // Map Sanity data to match the Product interface
+        const formattedProducts = data.map((product: any) => ({
+          id: product._id,
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          category: product.category,
+          image: urlFor(product.image).url(), // Use urlFor to get the image URL
+          rating: {
+            rate: product.rating?.rate || 0,
+            count: product.rating?.count || 0,
+          },
+        }));
+
+        setProducts(formattedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
         setError("Failed to fetch products. Please try again later.");
@@ -305,11 +336,11 @@ const GridPage = () => {
                   </div>
                   <div className="mt-1 space-x-2">
                     <span className="text-[#151875] font-bold text-sm sm:text-base">
-                      ${(product.price * 0.8).toFixed(2)}
+                      ${(product.price)}
                     </span>
                     <span className="text-gray-400 line-through text-xs sm:text-sm">
-                      ${product.price.toFixed(2)}
-                    </span>
+    {typeof product.price === "number" ? product.price : ""}
+  </span>
                   </div>
                   {view === "list" && (
                     <p className="hidden sm:block mt-2 text-sm text-gray-600">

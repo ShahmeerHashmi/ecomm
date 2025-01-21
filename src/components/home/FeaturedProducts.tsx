@@ -4,17 +4,21 @@ import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from 'react';
+import { client } from "@/sanity/lib/client";
+import groq from 'groq';
+import { urlFor } from "@/sanity/lib/image";
+import { FaCartPlus, FaHeart } from 'react-icons/fa'; // Import icons from react-icons
 
 export interface Product {
-  id: number;
-  title: string;
+  _id: number;
+  name: string;
   price: number;
   description: string;
   category: string;
   image: string;
-  rating: {
-    rate: number;
-    count: number;
+  rating?: {
+    rate?: number;
+    count?: number;
   };
 }
 
@@ -25,12 +29,22 @@ export const FeaturedProducts = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const response = await fetch('https://fakestoreapi.com/products');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+      console.log('Fetching featured products...');
+      const query = groq`*[_type == "product" && isFeaturedProduct == true]{
+        _id,
+        name,
+        price,
+        description,
+        category,
+        image,
+        rating {
+          rate,
+          count
         }
-        const data = await response.json();
+      }`;
+      try {
+        const data = await client.fetch(query);
+        console.log('Fetched products:', data);
         setFeaturedProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -42,24 +56,6 @@ export const FeaturedProducts = () => {
 
     fetchProducts();
   }, []);
-
-  // Truncate description to 15 words
-  const truncateDescription = (text: string, maxWords: number) => {
-    const words = text.split(' ');
-    if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(' ') + '...';
-    }
-    return text;
-  };
-
-  // Truncate title to 3 words
-  const truncateTitle = (text: string, maxWords: number) => {
-    const words = text.split(' ');
-    if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(' ') + '...';
-    }
-    return text;
-  };
 
   if (loading) {
     return (
@@ -111,16 +107,16 @@ export const FeaturedProducts = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
           {featuredProducts.map((product) => (
-            <Card 
-              key={product.id}
+            <Card
+              key={product._id}
               className="relative group hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer"
             >
-              <Link href={`/product/${product.id}`} className="block">
+              <Link href={`/product/${product._id}`} className="block">
                 <div className="p-3 sm:p-4 flex flex-col h-full">
                   <div className="relative h-40 sm:h-48 w-full mb-3 sm:mb-4">
                     <Image
-                      src={product.image}
-                      alt={product.title}
+                      src={urlFor(product.image).url()}
+                      alt={product.name}
                       fill
                       className="object-contain group-hover:scale-105 transition-transform duration-300"
                       sizes="(max-width: 360px) 320px, (max-width: 450px) 400px, (max-width: 1024px) 50vw, 25vw"
@@ -128,16 +124,18 @@ export const FeaturedProducts = () => {
                   </div>
 
                   <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2">
-                    {truncateTitle(product.title, 3)}
+                    {product.name}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-600 mb-2">
-                    {truncateDescription(product.description, 5)}
+                    {product.description}
                   </p>
 
                   <div className="mt-auto flex justify-between items-center">
                     <span className="font-bold text-accent text-sm sm:text-base">${product.price}</span>
                     <div className="flex items-center">
-                      <span className="text-xs sm:text-sm text-gray-600 mr-1">{product.rating.rate}</span>
+                      <span className="text-xs sm:text-sm text-gray-600 mr-1">
+                        {product.rating?.rate ?? 'N/A'}
+                      </span>
                       <svg
                         className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400"
                         fill="currentColor"
@@ -150,31 +148,27 @@ export const FeaturedProducts = () => {
                 </div>
               </Link>
 
-              {/* Quick action buttons */}
-              <div className="absolute top-2 right-2 flex flex-col gap-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                <Link 
-                  href={`/product/${product.id}`}
-                  className="p-1.5 bg-white rounded-full shadow-sm hover:bg-pink-500 hover:text-white transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                </Link>
-                <button 
+              {/* Add to Cart and Wishlist Icons */}
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button
                   onClick={(e) => {
-                    e.preventDefault();
-                    // Add to wishlist functionality
+                    e.preventDefault(); // Prevent the Link from redirecting
+                    e.stopPropagation(); // Stop event propagation
+                    console.log("Add to Cart:", product._id); // Add your cart logic here
                   }}
-                  className="p-1.5 bg-white rounded-full shadow-sm hover:bg-pink-500 hover:text-white transition-colors"
+                  className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <FaCartPlus className="text-gray-700 w-5 h-5" />
                 </button>
-                <button 
+                <button
                   onClick={(e) => {
-                    e.preventDefault();
-                    // Add to cart functionality
+                    e.preventDefault(); // Prevent the Link from redirecting
+                    e.stopPropagation(); // Stop event propagation
+                    console.log("Add to Wishlist:", product._id); // Add your wishlist logic here
                   }}
-                  className="p-1.5 bg-white rounded-full shadow-sm hover:bg-pink-500 hover:text-white transition-colors"
+                  className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300 ml-2"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                  <FaHeart className="text-gray-700 w-5 h-5" />
                 </button>
               </div>
             </Card>

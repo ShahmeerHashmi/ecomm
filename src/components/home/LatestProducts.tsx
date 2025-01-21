@@ -1,19 +1,24 @@
-"use client";
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { client } from "../../sanity/lib/client"; // Import the Sanity client
 import { Card } from "../ui/card";
+import { groq } from "next-sanity";
+import { urlFor } from "@/sanity/lib/image";
+import { FaCartPlus, FaHeart } from 'react-icons/fa'; // Import icons from react-icons
 
 export interface Product {
-  id: number;
-  title: string;
+  _id: number;
+  name: string;
   price: number;
   description: string;
   category: string;
   image: string;
-  rating: {
-    rate: number;
-    count: number;
+  rating?: {
+    rate?: number;
+    count?: number;
   };
 }
 
@@ -24,12 +29,22 @@ const LatestProducts = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+      console.log('Fetching featured products...');
+      const query = groq`*[_type == "product" && isFeaturedProduct == true]{
+        _id,
+        name,
+        price,
+        description,
+        category,
+        image,
+        rating {
+          rate,
+          count
         }
-        const data = await response.json();
+      }`;
+      try {
+        const data = await client.fetch(query);
+        console.log('Fetched products:', data);
         setLatestProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -41,24 +56,6 @@ const LatestProducts = () => {
 
     fetchProducts();
   }, []);
-
-  // Truncate description to a specified number of words
-  const truncateDescription = (text: string, maxWords: number) => {
-    const words = text.split(" ");
-    if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(" ") + "...";
-    }
-    return text;
-  };
-
-  // Truncate title to a specified number of words
-  const truncateTitle = (text: string, maxWords: number) => {
-    const words = text.split(" ");
-    if (words.length > maxWords) {
-      return words.slice(0, maxWords).join(" ") + "...";
-    }
-    return text;
-  };
 
   if (loading) {
     return (
@@ -139,83 +136,57 @@ const LatestProducts = () => {
       </div>
       <div className="grid grid-cols-1 min-[450px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         {latestProducts.slice(0, 6).map((product) => (
-          <Link key={product.id} href={`/product/${product.id}`}>
-            <Card className="group p-4 sm:p-6 hover:shadow-lg transition-shadow duration-300 border border-gray-100 rounded-lg overflow-hidden">
-              {/* Product Image */}
-              <div className="relative h-48 sm:h-60 mb-4 bg-gray-50 rounded-lg overflow-hidden">
-                <Image
-                  src={product.image}
-                  alt={product.title}
-                  fill
-                  className="object-contain group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 450px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw"
-                />
-              </div>
+          <Card
+            key={product._id}
+            className="relative group hover:shadow-lg transition-shadow duration-300 overflow-hidden cursor-pointer"
+          >
+            <Link href={`/product/${product._id}`} className="block">
+              <div className="p-3 sm:p-4 flex flex-col h-full">
+                <div className="relative h-40 sm:h-48 w-full mb-3 sm:mb-4">
+                  <Image
+                    src={urlFor(product.image).url()}
+                    alt={product.name}
+                    fill
+                    className="object-contain group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 360px) 320px, (max-width: 450px) 400px, (max-width: 1024px) 50vw, 25vw"
+                  />
+                </div>
 
-              {/* Product Details */}
-              <div className="text-center sm:text-left">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">
-                  {truncateTitle(product.title, 3)} {/* Truncate title to 3 words */}
+                <h3 className="font-semibold text-base sm:text-lg mb-1 sm:mb-2">
+                  {product.name}
                 </h3>
-                <p className="text-sm sm:text-base text-gray-600 mb-4">
-                  {truncateDescription(product.description, 5)}
+                <p className="text-xs sm:text-sm text-gray-600 mb-2">
+                  {product.description}
                 </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-lg sm:text-xl font-bold text-accent">
-                    ${product.price}
-                  </p>
-                  <div className="flex items-center gap-1">
+
+                <div className="mt-auto flex justify-between items-center">
+                  <span className="font-bold text-accent text-sm sm:text-base">${product.price}</span>
+                  <div className="flex items-center">
+                    <span className="text-xs sm:text-sm text-gray-600 mr-1">
+                      {product.rating?.rate ?? 'N/A'}
+                    </span>
                     <svg
-                      className="w-4 h-4 text-yellow-400"
+                      className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
-                    <span className="text-sm sm:text-base text-gray-600">
-                      {product.rating.rate} ({product.rating.count})
-                    </span>
                   </div>
                 </div>
               </div>
+            </Link>
 
-              {/* Quick Actions */}
-              <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <button className="p-2 bg-white rounded-full shadow-sm hover:bg-pink-500 hover:text-white transition-colors">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                </button>
-                <button className="p-2 bg-white rounded-full shadow-sm hover:bg-pink-500 hover:text-white transition-colors">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                  </svg>
-                </button>
-              </div>
-            </Card>
-          </Link>
+            {/* Add to Cart and Wishlist Icons */}
+            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300">
+                <FaCartPlus className="text-gray-700 w-5 h-5" />
+              </button>
+              <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors duration-300 ml-2">
+                <FaHeart className="text-gray-700 w-5 h-5" />
+              </button>
+            </div>
+          </Card>
         ))}
       </div>
     </section>

@@ -2,6 +2,7 @@ import "./globals.css";
 import { Header } from "./components/Header";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { CartProvider } from "./contexts/CartContext";
 
 export const metadata = {
   title: 'Hekto - Modern Furniture Store',
@@ -22,7 +23,9 @@ export default function RootLayout({
         <Header />
         <Navbar />
         <main className="flex-grow">
+          <CartProvider>
           {children}
+          </CartProvider>
         </main>
         <Footer />
       </body>
