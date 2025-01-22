@@ -96,7 +96,7 @@ export default function OrderCompletedPage() {
         </div>
 
         {/* Company Logos */}
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-5 gap-8 items-center opacity-50">
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-5 ml-80 gap-8 items-center opacity-50">
           <Image
             src="/logosss.jpg"
             alt="Company logos"

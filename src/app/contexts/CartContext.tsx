@@ -31,7 +31,7 @@ const CartContext = createContext<CartContextType>({
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Product[]>([]);
 
-  const addToCart = (product: Product) => {
+ const addToCart = (product: Product) => {
     setCart((prevCart) => [...prevCart, product]);
     alert(`${product.name} added to cart`);
   };

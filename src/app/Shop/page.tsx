@@ -8,13 +8,26 @@ import groq from "groq"; // Import GROQ
 import { urlFor } from "@/sanity/lib/image"; // Import urlFor for image URLs
 
 export interface Product {
-  id: number;
+  id: string; // Changed from number to string to match Sanity's _id
   title: string;
   price: number;
   description: string;
   category: string;
   image: string;
   rating: {
+    rate: number;
+    count: number;
+  };
+}
+
+interface SanityProduct {
+  _id: string;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string; // Replace `any` with a more specific type if possible
+  rating?: {
     rate: number;
     count: number;
   };
@@ -51,7 +64,7 @@ const GridPage = () => {
         console.log("Fetched products:", data);
 
         // Map Sanity data to match the Product interface
-        const formattedProducts = data.map((product: any) => ({
+        const formattedProducts = data.map((product: SanityProduct) => ({
           id: product._id,
           title: product.title,
           price: product.price,
@@ -76,6 +89,7 @@ const GridPage = () => {
     fetchProducts();
   }, []);
 
+  // Rest of the code remains unchanged...
   if (loading) {
     return (
       <div className="min-h-screen">

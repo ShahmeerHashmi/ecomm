@@ -71,7 +71,7 @@ export default function CartPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="py-4">${item.price?.toFixed(2)}</td>
+                      
                       <td className="py-4">
                         <div className="flex items-center border rounded w-24">
                           <button

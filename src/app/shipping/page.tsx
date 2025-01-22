@@ -3,39 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useCart } from "@/app/contexts/CartContext"; // Import the useCart hook
+import { urlFor } from "@/sanity/lib/image";
 
 export default function ShippingPage() {
   const [keepUpdated, setKeepUpdated] = useState(false);
+  const { cart } = useCart(); // Use the useCart hook to get the cart state
 
-  // Sample cart items
-  const cartItems = [
-    {
-      id: 1,
-      name: "Ut diam consequat",
-      color: "Brown",
-      size: "XL",
-      price: 32.00,
-      image: "/image 1167.png"
-    },
-    {
-      id: 2,
-      name: "Ut diam consequat",
-      color: "Brown",
-      size: "XL",
-      price: 32.00,
-      image: "/image 1168.png"
-    },
-    {
-      id: 3,
-      name: "Ut diam consequat",
-      color: "Brown",
-      size: "XL",
-      price: 32.00,
-      image: "/image 1169.png"
-    }
-  ];
-
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price, 0);
+  // Calculate subtotal and total
+  const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.stock || 1)), 0);
   const total = subtotal + 6.00; // Adding shipping cost
 
   return (
@@ -139,26 +115,28 @@ export default function ShippingPage() {
             <div className="bg-[#F4F4FC] p-6 rounded-lg">
               {/* Cart Items */}
               <div className="space-y-4 mb-6">
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center gap-4">
+                {cart.map((item) => (
+                  <div key={item._id} className="flex items-center gap-4">
                     <div className="relative w-16 h-16 bg-white rounded">
                       <Image
-                        src={item.image}
+                        src={item.image ? urlFor(item.image).url() : '/default-image.png'}
                         alt={item.name}
                         fill
                         className="object-contain p-2"
                       />
                       <span className="absolute -top-2 -right-2 bg-gray-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                        1
+                        {item.stock || 1}
                       </span>
                     </div>
                     <div className="flex-1">
                       <h3 className="text-sm font-medium">{item.name}</h3>
                       <p className="text-xs text-gray-500">
-                        {item.color} / {item.size}
+                       
                       </p>
                     </div>
-                    <span className="font-medium">${item.price.toFixed(2)}</span>
+                    <span className="font-medium">
+                      ${(item.price * (item.stock || 1)).toFixed(2)}
+                    </span>
                   </div>
                 ))}
               </div>
