@@ -9,7 +9,12 @@ export const metadata = {
   description: 'Discover modern and trending furniture for your home',
   keywords: ['furniture', 'modern furniture', 'home decor', 'interior design'],
   authors: [{ name: 'Hekto' }],
-  viewport: 'width=device-width, initial-scale=1',
+};
+
+// Add the viewport export
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -24,7 +29,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-grow">
           <CartProvider>
-          {children}
+            {children}
           </CartProvider>
         </main>
         <Footer />
