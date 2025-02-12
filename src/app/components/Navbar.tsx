@@ -25,13 +25,13 @@ export const Navbar = () => {
               Home
             </Link>
             <Link 
-              href="/shop" 
+              href="/Shop" 
               className="text-secondary-light hover:text-accent transition-colors"
             >
               Shop
             </Link>
             <Link 
-              href="/product" 
+              href="/Product" 
               className="text-secondary-light hover:text-accent transition-colors"
             >
               Products
@@ -49,7 +49,7 @@ export const Navbar = () => {
               About
             </Link>
             <Link 
-              href="/contact" 
+              href="/Contact" 
               className="text-secondary-light hover:text-accent transition-colors"
             >
               Contact
@@ -68,7 +68,7 @@ export const Navbar = () => {
               </span>
             </Link>
             <Link 
-              href="/login"
+              href="/Login"
               className="text-secondary-light hover:text-accent transition-colors flex items-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,10 +105,10 @@ export const Navbar = () => {
               <Link href="/" className="text-secondary hover:text-accent transition-colors">
                 Home
               </Link>
-              <Link href="/shop" className="text-secondary-light hover:text-accent transition-colors">
+              <Link href="/Shop" className="text-secondary-light hover:text-accent transition-colors">
                 Shop
               </Link>
-              <Link href="/product" className="text-secondary-light hover:text-accent transition-colors">
+              <Link href="/Product" className="text-secondary-light hover:text-accent transition-colors">
                 Products
               </Link>
               <Link href="/blog" className="text-secondary-light hover:text-accent transition-colors">
@@ -117,7 +117,7 @@ export const Navbar = () => {
               <Link href="/about" className="text-secondary-light hover:text-accent transition-colors">
                 About
               </Link>
-              <Link href="/contact" className="text-secondary-light hover:text-accent transition-colors">
+              <Link href="/Contact" className="text-secondary-light hover:text-accent transition-colors">
                 Contact
               </Link>
               <Link href="/cart" className="flex items-center gap-2 text-secondary-light hover:text-accent transition-colors">
@@ -129,7 +129,7 @@ export const Navbar = () => {
                   5
                 </span>
               </Link>
-              <Link href="/login" className="flex items-center gap-2 text-secondary-light hover:text-accent transition-colors">
+              <Link href="/Login" className="flex items-center gap-2 text-secondary-light hover:text-accent transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>

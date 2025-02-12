@@ -3,6 +3,7 @@ import { Header } from "./components/Header";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { CartProvider } from "./contexts/CartContext";
+import ClientWrapper  from "../components/ClientWrapper";
 
 export const metadata = {
   title: 'Hekto - Modern Furniture Store',
@@ -11,29 +12,26 @@ export const metadata = {
   authors: [{ name: 'Hekto' }],
 };
 
-// Add the viewport export
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className="min-h-screen flex flex-col">
-        <Header />
-        <Navbar />
-        <main className="flex-grow">
-          <CartProvider>
-            {children}
-          </CartProvider>
-        </main>
-        <Footer />
-      </body>
-    </html>
+    <ClientWrapper>
+      <html lang="en" className="scroll-smooth">
+        <body className="min-h-screen flex flex-col">
+          <Header />
+          <Navbar />
+          <main className="flex-grow">
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </main>
+          <Footer />
+        </body>
+      </html>
+    </ClientWrapper>
   );
 }

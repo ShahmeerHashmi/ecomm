@@ -27,7 +27,7 @@ export const Header = () => {
           </button>
 
           <div className="flex gap-2">
-            <Link href="/login" className="text-[11px] hover:text-accent-light">
+            <Link href="/Login" className="text-[11px] hover:text-accent-light">
               Login
             </Link>
             <span className="text-[11px]">|</span>
@@ -41,11 +41,11 @@ export const Header = () => {
         {isMobileMenuOpen && (
           <div className="sm:hidden pt-4 pb-2 space-y-4 border-t border-white/10 mt-2">
             <div className="flex flex-col gap-2">
-              <a href="mailto:mhhasanul@gmail.com" className="text-[11px] hover:text-accent-light">
-                mhhasanul@gmail.com
+              <a href="mailto:syedshahmeer@gmail.com" className="text-[11px] hover:text-accent-light">
+                syedshahmeer@gmail.com
               </a>
-              <a href="tel:(12345)67890" className="text-[11px] hover:text-accent-light">
-                (12345)67890
+              <a href="tel:03123607710" className="text-[11px] hover:text-accent-light">
+                03123607710
               </a>
             </div>
             
@@ -66,11 +66,11 @@ export const Header = () => {
         {/* Desktop Header */}
         <div className="hidden sm:flex justify-between items-center">
           <div className="flex gap-6">
-            <a href="mailto:mhhasanul@gmail.com" className="text-sm hover:text-accent-light">
-              mhhasanul@gmail.com
+            <a href="mailto:syedshahmeer@gmail.com" className="text-sm hover:text-accent-light">
+              syedshahmeer@gmail.com
             </a>
-            <a href="tel:(12345)67890" className="text-sm hover:text-accent-light">
-              (12345)67890
+            <a href="tel: 03123607710" className="text-sm hover:text-accent-light">
+              03123607710
             </a>
           </div>
           
@@ -88,7 +88,7 @@ export const Header = () => {
             </nav>
             
             <div className="flex gap-4">
-              <Link href="/login" className="text-sm hover:text-accent-light">
+              <Link href="/Login" className="text-sm hover:text-accent-light">
                 Login
               </Link>
               <span className="text-sm">|</span>
