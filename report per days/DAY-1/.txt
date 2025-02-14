@@ -1,0 +1,79 @@
+1. Overview
+Marketplace Type:
+General E-Commerce
+
+Purpose:
+To provide a one-stop platform for buying and selling a wide range of furniture products, ensuring a seamless shopping experience with competitive pricing and fast delivery.
+
+2. Business Goals
+Problem to Solve:
+Enable customers to access a broad variety of furniture options in one convenient location, overcoming the limitations of fragmented offerings in the market.
+
+Target Audience:
+General consumers seeking an efficient, reliable, and convenient online shopping experience for furniture.
+
+Products/Services Offered:
+
+Sofas, chairs, tables, beds, and other home furnishings.
+Complementary content such as design inspiration and style guides.
+Unique Selling Proposition:
+A user-friendly interface, competitive pricing, rapid and reliable delivery, and enhanced product visualization (e.g., high-quality images, 360° views, and AR features).
+
+3. Enhanced Data Schema
+3.1. Entities & Key Fields
+Products:
+
+Key Fields: ID, Name, Price, Stock, Category, Dimensions, Material, Style, Tags (e.g., "Sofa", "Chair"), Images (high-res, 360° views).
+Purpose: Stores comprehensive details about each furniture item available for sale.
+Orders:
+
+Key Fields: Order ID, Customer Info, OrderItems (detailed below), Status, Timestamp.
+Purpose: Records the details of transactions, supporting multiple products per order through an intermediary entity.
+OrderItems: (New intermediary entity)
+
+Key Fields: OrderItem ID, Order ID (reference), Product ID (reference), Quantity, Purchase Price.
+Purpose: Manages the many-to-many relationship between Orders and Products, capturing purchase-specific details.
+Customers:
+
+Key Fields: Customer ID, Name, Contact Info, Address, Order History, Wishlist, Preferences.
+Purpose: Captures customer profiles and behavioral data to enable personalization and efficient service.
+Delivery Zones:
+
+Key Fields: Zone Name, Coverage Area, Assigned Drivers.
+Purpose: Defines the geographic areas covered by the logistics network.
+Shipment:
+
+Key Fields: Shipment ID, Order ID (reference), Status, Estimated Delivery Date, Tracking Information.
+Purpose: Tracks the shipment process from dispatch to delivery.
+Payments:
+
+Key Fields: Payment ID, Order ID (reference), Amount, Payment Method, Transaction Status.
+Purpose: Manages financial transactions and ensures secure payment processing.
+3.2. Relationships
+Products & Orders:
+
+Many-to-many relationship managed via the OrderItems entity.
+Orders & Customers:
+
+One-to-many relationship, where each order is linked to a specific customer.
+Shipments & Delivery Zones:
+
+Each shipment is associated with a specific delivery zone, enabling efficient logistics management.
+4. Current Workspace Structure
+4.1. Frontend (Next.js)
+Directory: src/app
+Key Components:
+Product Display: Product cards, detail pages, filters, and sorting mechanisms.
+Shopping Cart & Checkout: Components for managing cart items, applying discounts, and completing purchases.
+User Interactions: Components for user authentication, wishlists, and order history.
+Enhancements:
+Modularize components to maximize reuse and ease maintenance.
+Incorporate SSR and SSG for improved performance and SEO.
+4.2. Content Management (Sanity CMS)
+Directory: src/sanity
+Purpose:
+Manages product data and content.
+Supports dynamic content such as blogs, design inspiration, and product reviews.
+Enhancements:
+Define clear content schemas for consistency.
+Implement a preview mode for real-time content updates prior to publication.

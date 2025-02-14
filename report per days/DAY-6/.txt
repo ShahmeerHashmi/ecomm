@@ -1,0 +1,87 @@
+Hekto Marketplace – Day 6 Developer Report
+Deployment Preparation and Staging Environment Setup
+
+Overview
+Today, I focused on preparing Hekto Marketplace for production by setting up a robust staging environment. This phase involved configuring our hosting platform, securing environment variables, deploying the application, and running a series of tests to ensure that the application performs as expected in a production-like setting. The goal was to mimic real-world conditions and verify that our marketplace is ready for live deployment.
+
+Objectives
+Deployment Strategy:
+Establish a reliable staging environment using a hosting platform (Vercel) connected to our GitHub repository.
+
+Environment Configuration:
+Securely configure environment variables and API keys necessary for the application.
+
+Staging Deployment:
+Successfully deploy the application to a staging environment and validate the build process.
+
+Comprehensive Testing:
+Perform functional, performance, and security tests in the staging environment to identify any pre-deployment issues.
+
+Documentation:
+Update project documentation with detailed deployment steps, testing results, and environment configuration notes.
+
+My Process
+1. Hosting Platform Setup
+Selection and Integration:
+I chose Vercel as the hosting platform due to its seamless integration with Next.js and GitHub. I connected the Hekto repository to Vercel and configured the build settings.
+
+Build Configuration:
+Customized build scripts and settings to ensure that the deployment process is smooth and that all necessary assets are compiled correctly.
+
+2. Environment Variable Configuration
+Creating .env File:
+I created a .env file containing sensitive variables such as the Sanity project ID, dataset, and API keys.
+
+Secure Deployment:
+Uploaded these environment variables through the Vercel dashboard to ensure they are securely stored and not exposed in the codebase.
+
+3. Deploying to Staging
+Triggering Deployment:
+Initiated a deployment from Vercel which automatically built the application and deployed it to a staging environment. I monitored the build logs to ensure no errors occurred during the process.
+
+Validation:
+Once deployed, I verified that the staging site loaded correctly and that all core functionalities (dynamic data fetching, routing, and component rendering) operated as expected.
+
+4. Staging Environment Testing
+Functional Testing:
+I ran through key user workflows such as product browsing, cart operations, and checkout processes to verify that every feature works reliably.
+
+Performance Testing:
+Utilized Lighthouse and GTmetrix to analyze page load times and responsiveness, making sure that the application meets our performance benchmarks.
+
+Security Testing:
+Conducted tests to validate that all inputs are sanitized, API calls are secure (over HTTPS), and sensitive data is well-protected.
+
+Cross-Browser Testing:
+Tested the application on major browsers (Chrome, Firefox, Safari, Edge) and on various devices using BrowserStack to ensure consistent performance and design.
+
+5. Documentation Updates
+Project Documentation:
+Updated the README.md file to include a summary of all deployment steps, environment configurations, and testing results.
+Test Reports:
+Compiled a detailed CSV-based testing report that includes test cases, steps, expected vs. actual outcomes, and remarks for future reference.
+Challenges and Solutions
+Build Failures:
+Initially encountered issues with missing dependencies during the build process. Resolved by ensuring all dependencies were correctly listed and updating the build scripts.
+
+Environment Variable Misconfigurations:
+Some environment variables were not properly recognized on the staging server. I fixed this by reconfiguring the variables in the Vercel dashboard and double-checking the naming conventions.
+
+Performance Bottlenecks:
+Performance tests revealed a few bottlenecks, which I addressed by optimizing image assets and refining the caching strategy.
+
+Cross-Browser Inconsistencies:
+Minor layout discrepancies were observed on Safari and Edge. These were resolved with targeted CSS adjustments and additional media queries.
+
+Final Outcome
+Staging Environment:
+The application is successfully deployed to a staging environment on Vercel. The staging URL (provided in the submission) reflects a production-like setup.
+
+Secured and Configured:
+Environment variables are securely configured, ensuring that API keys and other sensitive data are protected.
+
+Thorough Testing:
+All functional, performance, security, and cross-browser tests have been executed with positive results. Detailed reports are available in the repository.
+
+Comprehensive Documentation:
+All deployment steps, testing procedures, and configuration details have been documented in the project repository, ensuring clarity for future deployments or audits.

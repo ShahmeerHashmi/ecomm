@@ -1,0 +1,89 @@
+Hekto Marketplace – Day 3 Developer Report
+API Integration & Data Migration
+
+Overview
+Today, I focused on integrating external APIs into Hekto and migrating the fetched data into our Sanity CMS. The goal was to ensure our product catalog is always up-to-date with real-world data, and to streamline our data ingestion process. This report documents my journey, the challenges I encountered, and the solutions I implemented.
+
+What I Aimed to Achieve
+Seamless API Integration:
+Retrieve up-to-date product and category data from a designated external API.
+
+Data Migration to Sanity CMS:
+Transform the API data to match our existing schema and import it into Sanity.
+
+Schema Validation and Adjustment:
+Ensure that the incoming data aligns perfectly with our current schema, modifying the schema where necessary.
+
+My Process
+1. Reviewing the API Documentation
+I began by thoroughly reviewing the API documentation for the external furniture product data source. Key endpoints such as /products and /categories were identified. This step was crucial to understand the data structure, field names, and types provided by the API.
+
+2. Schema Mapping and Adjustments
+After reviewing the API, I compared the provided fields with our existing Sanity CMS schema. For example, I mapped the API’s product_title to our schema’s name field.
+Challenges:
+
+Some fields had different naming conventions.
+The API included additional data (like dimensions and material) that our initial schema did not account for.
+What I Did:
+I updated our schema to include these new fields, ensuring that every piece of data from the API could be accommodated. This adjustment was critical to maintain data integrity and provide a richer product display.
+
+3. Developing Migration Scripts
+I wrote a set of Node.js scripts to automate the process of fetching and transforming the data.
+Steps Taken:
+
+Fetching Data:
+I created utility functions that made HTTP requests to the API, fetching product and category data.
+
+Data Transformation:
+The raw API data was then transformed to fit our Sanity schema. I paid close attention to type conversions and nested data structures.
+
+Importing into Sanity:
+Finally, the transformed data was imported into our Sanity CMS using their import tools.
+
+Challenges Faced:
+
+Data inconsistencies: Some API responses had missing fields or unexpected formats.
+Performance: Initial tests showed slow data import times for larger datasets.
+Solutions:
+
+I implemented validation checks within the migration script to log and skip over incomplete records.
+I optimized the script by batching API calls and using asynchronous processing to speed up the data import process.
+4. Integrating API Calls into Next.js
+To ensure that the frontend reflected these changes:
+
+I added helper functions in our Next.js project to call the updated API endpoints.
+I modified our product listing and detail pages to fetch and render data from Sanity dynamically.
+Challenges:
+
+Handling error states: Ensuring that if the API failed, the user wouldn’t be met with a blank page.
+What I Did:
+I introduced fallback UI elements like skeleton loaders and user-friendly error messages.
+
+5. Testing and Debugging
+I rigorously tested every part of the process:
+
+API Testing:
+I used Postman to validate API responses and confirm the integrity of the data being fetched.
+Data Validation:
+I checked that the data in Sanity matched what was expected, both in structure and content.
+Frontend Testing:
+The Next.js components were tested to ensure that they correctly rendered the new data, and that error handling worked as expected.
+Reflections and Lessons Learned
+Importance of Schema Flexibility:
+I learned that having a flexible schema in Sanity is crucial when dealing with external data sources that may evolve over time.
+
+Error Handling is Key:
+Robust error handling and logging were essential in identifying and resolving issues during both API integration and data migration.
+
+Performance Optimization:
+Batch processing and asynchronous handling significantly improved the performance of data migration, which is something I’ll continue to refine in future iterations.
+
+Final Outcome
+Updated Sanity CMS:
+The CMS now contains enriched product data, including additional fields like dimensions and materials.
+
+Functional Frontend Integration:
+The Next.js application successfully displays the updated product listings, complete with new data points, and gracefully handles API errors.
+
+Reliable Migration Process:
+The migration scripts run efficiently and include comprehensive validation and error logging.

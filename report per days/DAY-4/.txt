@@ -1,0 +1,100 @@
+Hekto Marketplace – Day 4 Developer Report
+Building Dynamic Frontend Components
+
+Overview
+Today, I shifted focus to the frontend, aiming to create dynamic and responsive components that display real-time data fetched from Sanity CMS and integrated APIs. The goal was to transform the raw data from our backend into a polished, user-friendly interface on our Next.js application, accessible at heckto-ten.vercel.app.
+
+Objectives
+Dynamic Data Display:
+Build components that automatically render updated product information, categories, and user-related data.
+
+Modular & Reusable Design:
+Develop components with reusability in mind to ensure scalability and ease of future enhancements.
+
+Responsive UI & State Management:
+Implement a design that adapts seamlessly across devices while effectively managing state for elements like the cart and search functionality.
+
+Enhanced User Experience:
+Ensure that the interface is intuitive, visually appealing, and provides real-time feedback to user actions (e.g., adding items to the cart, filtering products).
+
+My Process
+1. Planning and Design
+Before coding, I reviewed the current state of the project on heckto-ten.vercel.app to identify key areas for improvement. I mapped out the core components to be developed, including:
+
+Product Listing & Detail Components:
+To display products in a grid layout with cards and enable dynamic routing for detailed views.
+
+Category & Filter Panel Components:
+For users to easily navigate and filter products by categories, price range, and availability.
+
+Search Bar:
+Implementing a live search feature to quickly find products based on name or tags.
+
+Cart and Wishlist Components:
+To track selected products and manage user preferences, utilizing state management for real-time updates.
+
+Additional UI Elements:
+Elements such as headers, footers, notifications, and pagination were planned to enhance navigation and overall UX.
+
+2. Component Development
+Product Listing Component
+What I Did:
+I created a grid layout that dynamically renders product cards. Each card displays the product name, image, price, and stock status.
+
+Challenges:
+Ensuring a uniform layout across different screen sizes required careful use of responsive CSS classes. I resolved this by leveraging Tailwind CSS, which provided a straightforward solution for responsive design.
+
+Product Detail Component
+What I Did:
+Using Next.js dynamic routing, I built individual product detail pages that include extended information like product descriptions, available sizes/colors, and additional images.
+
+Challenges:
+Managing dynamic routes was tricky at first. I refined the URL structure and used fallback pages to handle cases where product data wasn’t immediately available.
+
+Search and Filter Components
+What I Did:
+I integrated a live search bar that filters products by name and tags. In parallel, the filter panel component allows users to narrow down results by category, price range, and stock status.
+
+Challenges:
+Implementing state management for these components was a bit complex. I solved this by using React’s Context API to manage global state and passing necessary props to child components.
+
+Cart and Wishlist Components
+What I Did:
+I built components that update in real-time as users add or remove products. These components utilize local state and, where needed, session storage to persist data across page refreshes.
+
+Challenges:
+Synchronizing the cart state across different components was challenging. I refactored the state management logic to centralize updates, which significantly improved performance and reliability.
+
+3. Testing and Iteration
+Debugging:
+I used browser developer tools and React DevTools to monitor component states and inspect network requests. Console logs were essential in identifying issues with dynamic data rendering.
+
+User Experience:
+I added skeleton loaders for components that depend on API data to improve perceived performance and provide immediate feedback to users.
+
+Responsive Design:
+I extensively tested on multiple devices and adjusted breakpoints to ensure a consistent experience on both mobile and desktop views.
+
+Challenges and Solutions
+Dynamic Routing:
+Managing dynamic routes in Next.js initially led to some 404 errors. I fixed this by carefully structuring the routing logic and using fallback configurations.
+
+State Synchronization:
+Handling state across multiple components (like the cart and search bar) was initially problematic. Refactoring to use React Context helped streamline data flow and minimize redundant renders.
+
+Performance:
+Large product datasets sometimes slowed down the UI. Implementing lazy loading for images and optimizing component re-renders significantly boosted performance.
+
+Final Outcome
+Functional Product Pages:
+The product listing page dynamically renders data, and individual product pages provide detailed views with smooth navigation.
+
+Enhanced User Interactivity:
+Users can now search, filter, add to cart, and manage their wishlist in real-time, resulting in a much more engaging shopping experience.
+
+Robust and Scalable Components:
+The components are built with modularity in mind, making future enhancements or integrations straightforward.
+
+Responsive and Intuitive UI:
+The use of modern CSS libraries and thoughtful state management has resulted in a seamless, professional frontend experience.
+

@@ -1,0 +1,94 @@
+Hekto Marketplace Technical Foundation - Day 2 Documentation
+1. Overview
+Objective:
+This document reflects the progress made since Day 1, highlighting key improvements, architectural updates, and adjustments based on early testing and developer feedback. Our goal is to refine our platform’s performance, scalability, and user experience as we transition from the initial setup to a more robust marketplace.
+
+Scope:
+
+Updates to the data schema and relationships
+Refinements to the frontend (Next.js) architecture
+Backend and infrastructure enhancements
+Operational and security best practices
+2. Updates & Enhancements
+2.1 Data Schema Refinements
+Enhancements Made:
+
+OrderItems Entity:
+
+Finalized implementation of the intermediary OrderItems entity to better manage the many-to-many relationship between Orders and Products.
+Added fields for Quantity and Purchase Price to capture purchase-specific details.
+Extended Product Metadata:
+
+Introduced additional fields such as Dimensions, Material, and Style to enrich product data.
+Added support for multiple high-resolution images and 360° views to improve product visualization.
+Customer Profiles:
+
+Expanded the Customers entity to include Wishlist and Preferences for enhanced personalization.
+Initiated the logging of basic user behavior for future recommendation algorithms (compliant with privacy guidelines).
+Next Steps:
+
+Integrate dynamic tagging to improve search and filtering.
+Explore schema extensions for handling product reviews and ratings.
+2.2 Frontend (Next.js) Improvements
+Enhancements Made:
+
+Component Optimization:
+
+Refactored key components in the src/app directory for better modularity and reusability.
+Introduced lazy loading for image-heavy components to reduce initial page load times.
+Server-Side Rendering (SSR) & Static Site Generation (SSG):
+
+Configured SSR for product detail pages to improve SEO and initial load performance.
+Implemented Incremental Static Regeneration (ISR) for frequently updated pages (e.g., product listings).
+User Experience Enhancements:
+
+Added interactive elements for filtering and sorting on product listing pages.
+Improved mobile responsiveness and navigation to cater to a growing mobile audience.
+Next Steps:
+
+Develop additional UI components for a more engaging checkout process.
+Consider integrating progressive web app (PWA) features for offline support and improved performance.
+2.3 Backend & Infrastructure Updates
+Enhancements Made:
+
+API & Serverless Functions:
+
+Deployed initial serverless functions to handle order processing and payment transactions, ensuring scalability.
+Established a preliminary API gateway for managing data flows between the frontend, Sanity CMS, and other backend services.
+Caching & Performance:
+
+Integrated CDN caching for static assets to enhance load times across geographic regions.
+Implemented basic caching strategies for frequently requested data to reduce database load.
+Security Enhancements:
+
+Strengthened authentication and authorization layers for customer data and transactions.
+Initiated regular dependency audits and security reviews to maintain compliance with data protection standards.
+Next Steps:
+
+Monitor serverless functions and API endpoints for performance and adjust configurations as necessary.
+Enhance logging and monitoring to quickly identify and resolve potential security threats or performance bottlenecks.
+3. Operational Improvements
+Testing & Feedback:
+
+Early user testing has provided valuable insights into navigation and checkout usability.
+Developer feedback led to improved component documentation and streamlined integration processes.
+Continuous Integration/Continuous Deployment (CI/CD):
+
+Initiated a CI/CD pipeline to automate testing, deployment, and rollback processes.
+Implemented unit and integration tests for critical functionalities (e.g., order processing and payment handling).
+Documentation & Collaboration:
+
+Updated inline code documentation and architectural diagrams to reflect new changes.
+Scheduled regular sprint reviews and team sync-ups to ensure alignment and address emerging issues promptly.
+4. Future Considerations
+Enhanced Personalization:
+Leverage collected customer data for targeted recommendations and personalized shopping experiences.
+Advanced Analytics:
+Integrate advanced analytics tools to track user behavior, conversion rates, and other key performance indicators.
+Further Security Hardening:
+Plan for additional security layers such as two-factor authentication (2FA) and enhanced encryption for sensitive data.
+Scalability Improvements:
+Explore microservices architecture for key components to further isolate and scale functionality as the platform grows.
+5. Conclusion
+The Day 2 updates have laid a stronger foundation for Hekto’s marketplace by refining the initial architecture and addressing early challenges. As we continue to iterate, our focus will remain on enhancing performance, security, and user experience while ensuring the platform can scale with our growing customer base.
+
